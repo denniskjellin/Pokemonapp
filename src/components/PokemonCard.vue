@@ -13,7 +13,6 @@ const props = defineProps({
   },
 })
 
-// set up router for navigation
 const router = useRouter()
 
 // function to navigate to the Pokémon detail page
