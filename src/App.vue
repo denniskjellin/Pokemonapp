@@ -1,17 +1,12 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
   <nav>
-    <RouterLink to="/">Home</RouterLink> |
-    <RouterLink to="/favorites">Favorites</RouterLink> |
-    <RouterLink to="/pokemon/1">Pokemon Detail (1)</RouterLink>
+    <RouterLink to="/">Home</RouterLink> | <RouterLink to="/favorites">Favorites</RouterLink> |
+    <RouterLink to="/pokemon/">Pokemon Detail</RouterLink>
   </nav>
 
-  <router-view />
+  <RouterView />
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
