@@ -23,12 +23,21 @@ const goPokemonDetail = () => {
 
 <template>
   <li @click="goPokemonDetail">
-    <button @click.stop="togglePokemonFavorite(pokemon.id)">
-      <!-- unicode for star symbol -->
+    <!-- Aria added for accessibility when pressing add to favorites -->
+    <button
+      @click.stop="togglePokemonFavorite(pokemon.id)"
+      :aria-pressed="isFavoritePokemon(pokemon.id)"
+      :aria-label="
+        isFavoritePokemon(pokemon.id)
+          ? `Remove ${pokemon.name} from favorites`
+          : `Add ${pokemon.name} to favorites`
+      "
+    >
       {{ isFavoritePokemon(pokemon.id) ? '★' : '☆' }}
     </button>
 
-    <img :src="pokemon.image" :alt="pokemon.name" />
+    <img :src="pokemon.image" :alt="pokemon.name" width="96" height="96" />
+
     <strong>{{ pokemon.name }}</strong>
     – height: {{ pokemon.height }} – types: {{ pokemon.types.join(', ') }}
   </li>
