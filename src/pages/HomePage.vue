@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { getPokemonList, getPokemon } from '../api/pokemon'
 import PokemonCard from '../components/PokemonCard.vue'
 
@@ -7,6 +7,19 @@ import PokemonCard from '../components/PokemonCard.vue'
 const pokemons = ref([])
 const loading = ref(true)
 const error = ref(null)
+
+// filter default, all pokemons
+const selectedPokemonType = ref('all')
+
+// computed for filtered pokemons
+const filteredPokemons = computed(() => {
+  // if 'all' is selected, return all
+  if (selectedPokemonType.value === 'all') {
+    return pokemons.value
+  }
+
+  return pokemons.value.filter((pokemon) => pokemon.types.includes(selectedPokemonType.value))
+})
 
 // fetch Pokemon data on component mount
 onMounted(async () => {
@@ -32,12 +45,29 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
-    <h1>Pokemon Home</h1>
+  <h1>Pokemon Home</h1>
+
+  <div class="filters">
+    <label>
+      Filter by type:
+      <select v-model="selectedPokemonType">
+        <option value="all">All</option>
+        <option value="fire">Fire</option>
+        <option value="water">Water</option>
+        <option value="grass">Grass</option>
+        <option value="electric">Electric</option>
+      </select>
+    </label>
+  </div>
+
+  <section>
     <p v-if="loading">Loading...</p>
     <p v-else-if="error">{{ error }}</p>
+
     <ul v-else>
-      <PokemonCard v-for="pokemon in pokemons" :key="pokemon.id" :pokemon="pokemon" />
+      <PokemonCard v-for="pokemon in filteredPokemons" :key="pokemon.id" :pokemon="pokemon" />
     </ul>
-  </div>
+  </section>
+  <!-- if no pokemon match selected filter -->
+  <p v-if="filteredPokemons.length === 0">No Pokemon match the selected filter.</p>
 </template>
