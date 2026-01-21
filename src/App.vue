@@ -2,10 +2,10 @@
 
 <template>
   <header>
-    <nav>
+    <nav aria-label="Main navigation">
       <RouterLink to="/">Home</RouterLink> |
       <RouterLink to="/favorites">Favorites</RouterLink>
-      </nav>
+    </nav>
   </header>
   <main id="main-content">
     <RouterView />

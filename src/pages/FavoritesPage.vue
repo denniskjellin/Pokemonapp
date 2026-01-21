@@ -14,7 +14,7 @@ const error = ref(null)
 const selectedPokemonType = ref('all')
 const sortPokemonBy = ref('name')
 
-// computed property for filtered and sorted favorite
+// computed property for filtered and sorted favorites
 const filteredAndSortedFavorites = computed(() => {
   // new array to avoid mixing with original fetch data
   let list = [...favoritesData.value]
@@ -68,33 +68,32 @@ watchEffect(async () => {
 
 <template>
   <h1>Favorites</h1>
-  <div class="filters">
-    <label>
-      Filter by type:
-      <select v-model="selectedPokemonType">
-        <option value="all">All</option>
-        <option value="fire">Fire</option>
-        <option value="water">Water</option>
-        <option value="grass">Grass</option>
-        <option value="electric">Electric</option>
-      </select>
-    </label>
 
-    <label>
-      Sort by:
-      <select v-model="sortPokemonBy">
-        <option value="name">Name (A–Z)</option>
-        <option value="height">Height</option>
-      </select>
-    </label>
-  </div>
+  <form class="filter">
+    <label for="type-filter">Filter by type:</label>
+    <select id="type-filter" v-model="selectedPokemonType">
+      <option value="all">All</option>
+      <option value="bug">Bug</option>
+      <option value="electric">Electric</option>
+      <option value="fire">Fire</option>
+      <option value="grass">Grass</option>
+      <option value="normal">Normal</option>
+      <option value="water">Water</option>
+    </select>
+
+    <label for="sort-filter">Sort by:</label>
+    <select id="sort-filter" v-model="sortPokemonBy">
+      <option value="name">Name (A–Z)</option>
+      <option value="height">Height</option>
+    </select>
+  </form>
+
   <div>
-    <p v-if="loading">Loading...</p>
-    <p v-else-if="error">{{ error }}</p>
+    <p v-if="loading" role="status" aria-live="polite">Loading...</p>
+    <p v-else-if="error" role="alert">{{ error }}</p>
+    <p v-else-if="filteredAndSortedFavorites.length === 0">You have no favorite Pokemon.</p>
 
-    <p v-else-if="filteredAndSortedFavorites.length === 0">You have no favorite Pokémon yet.</p>
-
-    <ul v-else>
+    <ul v-else class="pokemon-list">
       <PokemonCard
         v-for="pokemon in filteredAndSortedFavorites"
         :key="pokemon.id"

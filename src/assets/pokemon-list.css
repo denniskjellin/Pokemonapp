@@ -1,0 +1,39 @@
+/*Styling used in HomePage and FavoritesPage, so broke out styling instead of duplicating it scoped */
+.pokemon-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0rem;
+  margin: 0;
+  list-style: none;
+}
+
+/* mobile */
+.pokemon-list > li {
+  flex: 1 1 100%;
+}
+
+/* tablet */
+@media (min-width: 640px) {
+  .pokemon-list > li {
+    flex: 1 1 48%;
+  }
+}
+
+/* dekstop */
+@media (min-width: 1024px) {
+  .pokemon-list > li {
+    flex: 1 1 23%;
+  }
+}
+
+/* setting own styling, in case broswer fails */
+.pokemon-card:focus-visible {
+  outline: 3px solid #000;
+  outline-offset: 3px;
+}
+
+.favorite-button:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
