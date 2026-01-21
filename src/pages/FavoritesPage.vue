@@ -1,14 +1,40 @@
 <script setup>
-import { ref, watchEffect } from 'vue'
+import { ref, watchEffect, computed } from 'vue'
 import { usePokemonFavorites } from '../composables/usePokemonFavorites'
 import { getPokemon } from '../api/pokemon'
 import PokemonCard from '../components/PokemonCard.vue'
 
 const { pokemonFavorites } = usePokemonFavorites()
 
+// state variables
 const favoritesData = ref([])
 const loading = ref(false)
 const error = ref(null)
+
+const selectedPokemonType = ref('all')
+const sortPokemonBy = ref('name')
+
+// computed property for filtered and sorted favorite
+const filteredAndSortedFavorites = computed(() => {
+  // new array to avoid mixing with original fetch data
+  let list = [...favoritesData.value]
+
+  // filter by selected type, if not 'all' as default
+  if (selectedPokemonType.value !== 'all') {
+    list = list.filter((pokemon) => pokemon.types.includes(selectedPokemonType.value))
+  }
+
+  // sort by selected value
+  if (sortPokemonBy.value === 'name') {
+    list.sort((a, b) => a.name.localeCompare(b.name))
+  }
+
+  if (sortPokemonBy.value === 'height') {
+    list.sort((a, b) => a.height - b.height)
+  }
+
+  return list
+})
 
 // fetch favorite details when favorite list changes
 watchEffect(async () => {
@@ -21,7 +47,7 @@ watchEffect(async () => {
   error.value = null
 
   try {
-    // fetch details for each favorite Pokemon
+    // fetch details for each favorite pokemon
     const details = await Promise.all(pokemonFavorites.value.map((id) => getPokemon(id)))
 
     // map pokemon details to desired format/information
@@ -41,16 +67,39 @@ watchEffect(async () => {
 </script>
 
 <template>
-  <div>
-    <h1>Favorites</h1>
+  <h1>Favorites</h1>
+  <div class="filters">
+    <label>
+      Filter by type:
+      <select v-model="selectedPokemonType">
+        <option value="all">All</option>
+        <option value="fire">Fire</option>
+        <option value="water">Water</option>
+        <option value="grass">Grass</option>
+        <option value="electric">Electric</option>
+      </select>
+    </label>
 
+    <label>
+      Sort by:
+      <select v-model="sortPokemonBy">
+        <option value="name">Name (A–Z)</option>
+        <option value="height">Height</option>
+      </select>
+    </label>
+  </div>
+  <div>
     <p v-if="loading">Loading...</p>
     <p v-else-if="error">{{ error }}</p>
 
-    <p v-else-if="favoritesData.length === 0">You have no favorite Pokémon yet.</p>
+    <p v-else-if="filteredAndSortedFavorites.length === 0">You have no favorite Pokémon yet.</p>
 
     <ul v-else>
-      <PokemonCard v-for="pokemon in favoritesData" :key="pokemon.id" :pokemon="pokemon" />
+      <PokemonCard
+        v-for="pokemon in filteredAndSortedFavorites"
+        :key="pokemon.id"
+        :pokemon="pokemon"
+      />
     </ul>
   </div>
 </template>
