@@ -5,10 +5,13 @@ import { getPokemon } from '../api/pokemon'
 
 const route = useRoute()
 
+// state variables
 const pokemon = ref(null)
 const loading = ref(true)
 const error = ref(null)
 
+
+// fetch Pokemon by route id,
 onMounted(async () => {
   try {
     const id = route.params.id

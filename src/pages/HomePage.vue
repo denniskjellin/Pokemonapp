@@ -19,7 +19,7 @@ const filteredPokemons = computed(() => {
   return pokemons.value.filter((pokemon) => pokemon.types.includes(selectedPokemonType.value))
 })
 
-// fetch Pokemon data on component mount
+// fetch pokemon data on component mount
 onMounted(async () => {
   try {
     const data = await getPokemonList()
