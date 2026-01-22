@@ -1,6 +1,6 @@
 # Pokemonapp
 
-This template should help get you started developing with Vue 3 in Vite.
+The app focuses on a clean UI, structured components, and basic state handling.
 
 ## Recommended IDE Setup
 
